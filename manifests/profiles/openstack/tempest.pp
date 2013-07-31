@@ -110,7 +110,7 @@ class coi::profiles::openstack::tempest (
 
     resize_available          => $resize_available,
     change_password_available => $change_password_available,
-    version_to_test           => $tempest_revision,
+    tempest_repo_revision     => $tempest_revision,
 
     require                   => [ Service['keystone'],
                                    Service['glance-api'],
