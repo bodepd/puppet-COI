@@ -11,8 +11,9 @@ class coi::profiles::openstack::base (
   $controller_node_internal = hiera('controller_node_internal'),
   # information about which repos to use
   $package_repo             = hiera('package_repo', 'cisco_repo'),
-  $openstack_release        = hiera('openstack_release', 'grizzly-proposed'),
+  $openstack_release        = hiera('openstack_release', 'grizzly'),
   $openstack_repo_location  = hiera('openstack_repo_location', false),
+  $ubuntu_repo              = hiera('openstack_ubuntu_repo', 'updates')
   # optional external services
   $default_gateway          = hiera('default_gateway', false),
   $proxy                    = hiera('proxy', false),
@@ -88,11 +89,9 @@ UcXHbA==
       } else {
         $cloud_archive_location = 'http://ubuntu-cloud.archive.canonical.com/ubuntu'
       }
-      apt::source { 'openstack_cloud_archive':
-        location          => $cloud_archive_location,
-        release           => $openstack_release,
-        repos             => 'main',
-        required_packages => 'ubuntu-cloud-keyring',
+      class { 'openstack::repo::uca':
+        release =>  $openstack_release,
+        repo    =>  $ubuntu_repo,
       }
     } else {
       fail("Unsupported package repo ${package_repo}")
